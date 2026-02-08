@@ -1,9 +1,20 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, `../.env.${process.env.NODE_ENV || 'development'}`) });
+
 const app = express();
 app.use(express.json()); // Permite procesar JSON en el cuerpo de las peticiones
 
-const SECRET_KEY = 'admin12'; // Cambia esto por una clave más segura
+// Variables de entorno
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const PORT = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY || 'admin12';
+const LOG_LEVEL = process.env.LOG_LEVEL || 'debug';
+
+console.log(`🚀 Ambiente: ${NODE_ENV}`);
+console.log(`📡 Puerto: ${PORT}`);
+console.log(`📊 Log Level: ${LOG_LEVEL}`);
 let items = [{ id: 1, name: 'Primer item' }];
 
 // Middleware para verificar JWT
@@ -96,5 +107,5 @@ app.get('/api/items/paginated', verificarToken, (req, res) => {
     });
 });
 
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Servidor en http://localhost:${PORT}`));
+// const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Servidor en http://localhost:${PORT}`));
